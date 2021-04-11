@@ -1,0 +1,25 @@
+{
+  "name": "pixel-format",
+  "version": "1.0.1",
+  "description": "Convert from one pixel format to another",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LordVonAdel/pixel-format.git"
+  },
+  "keywords": [
+    "RGBA8888",
+    "RGB",
+    "RGB565",
+    "converter"
+  ],
+  "author": "Adrian Urban",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LordVonAdel/pixel-format/issues"
+  },
+  "homepage": "https://github.com/LordVonAdel/pixel-format#readme"
+}
