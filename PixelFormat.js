@@ -52,6 +52,32 @@ class PixelFormat {
     return out;
   }
 
+  parseArraySegment(array, offset) {
+    let bitOffset = 0;
+    let values = [];
+    for (let i = 0; i < this.elements.length; i++) {
+      let element = this.elements[i];
+      let maxValue = (1 << element.bits) - 1;
+      let value = 0;
+      for (let j = 0; j < element.bits; j++) {
+        let boff = bitOffset + j;
+        let byte = array[Math.floor(boff / 8) + offset];
+        let bit = (byte >> (7 - (boff % 8))) & 1;
+        value |= bit << ((element.bits - 1) - j);
+      }
+      value /= maxValue;
+
+      values.push({
+        value,
+        variable: element.variable
+      });
+
+      bitOffset += element.bits;
+    }
+    return values;
+
+  }
+
   static parseFormatRGB888(formatString) {
 
     let out = [];

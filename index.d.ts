@@ -33,6 +33,12 @@ export declare class PixelFormat {
    */
   makeInteger(values: [ColorValue]): number;
 
+  /**
+   * Parses a single color from an 8 bit array. Used for colors with a higher resolution than the js limit of integers
+   * @param array Source array
+   * @param offset Offset index of start color
+   */
+  parseArraySegment(array: Array<number>, offset: number): ColorValue;
 }
 
 /**

@@ -34,6 +34,7 @@ A format can be defined in the form `RGB888` (All variables followed by numbers 
 ## Limitations
 * Individual pixels in an array must start at a full byte offset. 7 bit colors will have an padding bit at the end.
 * Parts with more than 9 bit resolution can't be formatted as "RGB161616" and must be specified as "R16G16B16"
+* Colors that need more than the bit limit of javascript integers can't be converted with convertInteger()
 
 ## License
 MIT

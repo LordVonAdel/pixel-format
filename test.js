@@ -10,3 +10,4 @@ executeTest("Swap bytes", () => index.convertInteger(0xA1B2, "A8B8", "BA88").toS
 executeTest("Use max value for missing", () => index.convertInteger(0xAABB, "R8G8", "R8G8A8").toString(16) == "aabbff");
 executeTest("16 bit values", () => index.convertInteger(0xA1B2C3D4, "U16V16", "U8V8") == 41411);
 executeTest("Convert array", () => index.convertArray([1, 2, 3, 4, 5, 6], "A8B8C8", "C8B8A8").join("") == "321654");
+executeTest("Parse array segment", () => (new index.Format("ABC484")).parseArraySegment([0b11001010, 0b10101100, 0b11010010], 1)[1].value.toString().startsWith("0.803921"));
