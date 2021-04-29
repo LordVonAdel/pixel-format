@@ -39,6 +39,14 @@ export declare class PixelFormat {
    * @param offset Offset index of start color
    */
   parseArraySegment(array: Array<number>, offset: number): ColorValue;
+
+  /**
+   * Writes a color at a specified position in an array
+   * @param array Target array
+   * @param offset Byte offset to start writing
+   * @param values Component values
+   */
+  writeArraySegment(array: Array<number>, offset: number, values: ColorValue): void;
 }
 
 /**

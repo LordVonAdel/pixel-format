@@ -20,19 +20,28 @@ function convertArray(source, from, to) {
   let elements = source.length / srcSize;
   let target = new Uint8Array(elements * targetSize);
 
-  for (let i = 0; i < elements; i++) {
-    let srcOffset = i * srcSize;
-    let targetOffset = i * targetSize;
-
-    let srcValue = 0;
-    for (let j = 0; j < srcSize; j++) {
-      srcValue |= source[srcOffset + j] << (j * 8)
+  if (srcSize > 4 || targetSize > 4) { // High resolution for more than 32 bit numbers
+    for (let i = 0; i < elements; i++) {
+      let srcOffset = i * srcSize;
+      let targetOffset = i * targetSize;
+      let values = from.parseArraySegment(source, srcOffset);
+      to.writeArraySegment(target, targetOffset, values);
     }
+  } else { // Lower resolution colors
+    for (let i = 0; i < elements; i++) {
+      let srcOffset = i * srcSize;
+      let targetOffset = i * targetSize;
 
-    let targetValue = convertInteger(srcValue, formatFrom, formatTo);
+      let srcValue = 0;
+      for (let j = 0; j < srcSize; j++) {
+        srcValue |= source[srcOffset + j] << (j * 8)
+      }
 
-    for (let j = 0; j < targetSize; j++) {
-      target[targetOffset + j] = (targetValue >> (j * 8)) & 0xFF;
+      let targetValue = convertInteger(srcValue, formatFrom, formatTo);
+
+      for (let j = 0; j < targetSize; j++) {
+        target[targetOffset + j] = (targetValue >> (j * 8)) & 0xFF;
+      }
     }
   }
 

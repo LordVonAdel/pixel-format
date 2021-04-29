@@ -52,7 +52,7 @@ class PixelFormat {
     return out;
   }
 
-  parseArraySegment(array, offset) {
+  parseArraySegment(array, offset = 0) {
     let bitOffset = 0;
     let values = [];
     for (let i = 0; i < this.elements.length; i++) {
@@ -63,19 +63,43 @@ class PixelFormat {
         let boff = bitOffset + j;
         let byte = array[Math.floor(boff / 8) + offset];
         let bit = (byte >> (7 - (boff % 8))) & 1;
-        value |= bit << ((element.bits - 1) - j);
+        value |= (bit) << ((element.bits - 1) - j);
       }
-      value /= maxValue;
 
       values.push({
-        value,
+        value: Number(value) / Number(maxValue),
         variable: element.variable
       });
 
       bitOffset += element.bits;
     }
     return values;
+  }
 
+  writeArraySegment(array, offset = 0, values) {
+    let bitOffset = 0;
+
+    for (let i = 0; i < this.getSize(); i++) {
+      array[offset + i] = 0;
+    }
+
+    for (let i = 0; i < this.elements.length; i++) {
+      let element = this.elements[i];
+      let value = values.find(val => val.variable == element.variable);
+      let maxValue = (1n << BigInt(element.bits)) - 1n;
+      value = value ? value.value : 1;
+
+      let absoluteValue = Math.round(value * Number(maxValue));
+      for (let j = 0; j < element.bits; j++) {
+        let localBit = bitOffset % 8;
+        let byte = offset + Math.floor(bitOffset / 8);
+
+        let srcBit = +((absoluteValue & (1 << (element.bits - 1 - j))) > 0);
+
+        array[byte] |= (1 << (7 - localBit)) * srcBit;
+        bitOffset++;
+      }
+    }
   }
 
   static parseFormatRGB888(formatString) {
